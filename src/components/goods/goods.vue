@@ -31,18 +31,23 @@
                                 <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}
                                 </span>
                             </div>
+                            <div class="cartcontrol-wrapper">
+                                <cartcontrol :food="food"/>
                             </div>
-                            
+                            </div>
                         </li>
                     </ul>
                 </li>
             </ul>  
         </div>
+        <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" ></shopcart>
     </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
+import shopcart from '../../components/shopcart/shopcart'
+import cartcontrol from '../../components/cartcontrol/cartcontrol'
 
 export default {
     name:'goods',
@@ -57,6 +62,10 @@ export default {
             listHeight:[],
             scrollY:0,
         }
+    },
+    components:{
+        shopcart,
+        cartcontrol
     },
     computed:{
             currentIndex(){
@@ -73,7 +82,7 @@ export default {
     methods:{
         _initScroll(){
             this.menuScroll = new BScroll(this.$refs.menusWrapper,{click:true});
-            this.foodScroll = new BScroll(this.$refs.foodWrapper,{probeType:3});
+            this.foodScroll = new BScroll(this.$refs.foodWrapper,{probeType:3,click:true});
             this.foodScroll.on('scroll',(pos) =>{
                 this.scrollY = Math.abs(Math.round(pos.y));
             })
@@ -207,6 +216,7 @@ export default {
                 }
                 .content{
                     flex: 1;
+                    position: relative;
                     .name{
                         font-size: 14px;
                         margin: 2px 0 8px 0;
@@ -242,6 +252,11 @@ export default {
                             font-size: 10px;
                             color: rgb(147,153,159);
                         }
+                    }
+                    .cartcontrol-wrapper{
+                        position:absolute;
+                        right: 0;
+                        bottom: 1px;
                     }
                 }
                 

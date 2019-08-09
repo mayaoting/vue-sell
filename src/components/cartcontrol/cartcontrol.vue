@@ -15,22 +15,30 @@ export default {
       type:Object,
     },
   },
+  data(){
+    return{
+
+    }
+  },
   methods:{
-    decreaseCart(){
+    decreaseCart(event){
       if(!this.food.count) {
         return;
       } else {
         this.food.count--;
       }
     },
-    addCart(){
-      console.log("click");
+    addCart(event){
+      if(!event._constructed){
+        return;
+      }
       if(!this.food.count) {
         this.$set(this.food,'count',1)
         this.food.count = 1;
       } else {
         this.food.count++;
       }
+      this.$emit('cartadd',event.target);
     },
   },
 

@@ -10,10 +10,10 @@
         </div>
         <div class="foods-wrapper" ref="foodWrapper">
             <ul>
-                <li v-for="item in goods" class="food-list food-list-hook" >
+                <li  v-for="item in goods" class="food-list food-list-hook" >
                     <h1 class="title">{{item.name}}</h1>
                     <ul>
-                        <li v-for="food in item.foods" class="food-item">
+                        <li @click="selectDetailFood(food,$event)" v-for="food in item.foods" class="food-item">
                             <div class="icon">
                                 <img :src="food.icon" />
                             </div>
@@ -41,6 +41,7 @@
             </ul>  
         </div>
         <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+        <food :food="selectedFood" ref="food"></food>
     </div>
 </template>
 
@@ -48,7 +49,7 @@
 import BScroll from 'better-scroll'
 import shopcart from '../../components/shopcart/shopcart'
 import cartcontrol from '../../components/cartcontrol/cartcontrol'
-
+import food from '../../components/food/food'
 export default {
     name:'goods',
     props:{
@@ -61,11 +62,13 @@ export default {
             goods:[],
             listHeight:[],
             scrollY:0,
+            selectedFood:{},
         }
     },
     components:{
         shopcart,
-        cartcontrol
+        cartcontrol,
+        food,
     },
     computed:{
             currentIndex(){
@@ -122,7 +125,14 @@ export default {
             let foodList = this.$refs.foodWrapper.getElementsByClassName('food-list-hook');
             let el = foodList[index];
             this.foodScroll.scrollToElement(el,300);
-        }
+        },
+        selectDetailFood(food, event){
+            if(!event._constructed) {
+                return;
+            }
+            this.selectedFood = food;
+            this.$refs.food.show();
+        },
     },
     
     created(){
